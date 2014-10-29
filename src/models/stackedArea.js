@@ -72,20 +72,24 @@ nv.models.stackedArea = function() {
             return !series.disabled;
       });
 
-      data = d3.layout.stack()
-               .order(order)
-               .offset(offset)
-               .values(function(d) { return d.values })  //TODO: make values customizeable in EVERY model in this fashion
-               .x(getX)
-               .y(getY)
-               .out(function(d, y0, y) {
-                    var yHeight = (getY(d) === 0) ? 0 : y;
-                    d.display = {
-                      y: yHeight,
-                     y0: y0
-                    };
-                })
-              (dataFiltered);
+      if(dataFiltered.length > 0) {
+        data = d3.layout.stack()
+                .order(order)
+                .offset(offset)
+                .values(function(d) { return d.values })  //TODO: make values customizeable in EVERY model in this fashion
+                .x(getX)
+                .y(getY)
+                .out(function(d, y0, y) {
+                      var yHeight = (getY(d) === 0) ? 0 : y;
+                      d.display = {
+                        y: yHeight,
+                      y0: y0
+                      };
+                  })
+                (dataFiltered);
+      } else {
+        data = [];
+      }
 
 
       //------------------------------------------------------------
@@ -109,7 +113,9 @@ nv.models.stackedArea = function() {
         .width(availableWidth)
         .height(availableHeight)
         .x(getX)
-        .y(function(d) { return d.display.y + d.display.y0 })
+        .y(function(d) { 
+          return d.display.y + d.display.y0 
+        })
         .forceY([0])
         .color(data.map(function(d,i) {
           return d.color || color(d, d.seriesIndex);
