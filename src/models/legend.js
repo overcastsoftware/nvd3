@@ -60,7 +60,7 @@ nv.models.legend = function() {
                    if (data.every(function(series) { return series.disabled})) {
                        //the default behavior of NVD3 legends is, if every single series
                        // is disabled, turn all series' back on.
-                       data.forEach(function(series) { series.disabled = false});
+                       // data.forEach(function(series) { series.disabled = false});
                    }
                }
                dispatch.stateChange({
